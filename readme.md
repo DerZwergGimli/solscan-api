@@ -1,0 +1,1 @@
+- [QuickType](https://app.quicktype.io/) a generator for Types from JSON

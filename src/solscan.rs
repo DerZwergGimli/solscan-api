@@ -5,7 +5,6 @@ use crate::r#const::SOLSCANBASEURL;
 pub struct SolscanAPI {
     base_url: &'static str,
     client: Client,
-
 }
 
 impl SolscanAPI {
@@ -15,7 +14,7 @@ impl SolscanAPI {
             client: Client::new(),
         }
     }
-    
+
     pub async fn ping(&self, endpoint: Option<String>) -> Result<StatusCode, Error> {
         Ok(self.client.get(self.base_url.to_string() + endpoint.unwrap_or_default().as_str()).header("User-Agent", "Mozilla/5.0").send().await?.status())
     }
