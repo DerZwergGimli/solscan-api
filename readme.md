@@ -2,7 +2,7 @@
 
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![buid-test](https://github.com/DerZwergGimli/solscan-api/actions/workflows/build-test.yml/badge.svg)
+![buid-test](https://https://github.com/DerZwergGimli/solscan-api/actions/workflows/buid-test.yml/badge.svg)
 
 ``unoffical``
 
