@@ -7,7 +7,6 @@ mod test_market_token {
 
     use crate::solscan::SolscanAPI;
     use crate::tests::test_endpoints::sample_data::sample_market_token::SAMPLE_MARKET_TOKEN;
-    use crate::tests::test_endpoints::sample_data::sample_token_meta::SAMPLE_TOKEN_META;
 
     #[tokio::test]
     async fn test_market_token_success() {

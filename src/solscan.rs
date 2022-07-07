@@ -1,4 +1,3 @@
-use log::error;
 use reqwest::{Client, Error, StatusCode};
 use serde::de::DeserializeOwned;
 

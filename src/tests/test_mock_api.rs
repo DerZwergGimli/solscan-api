@@ -4,7 +4,6 @@
 mod test_error_codes {
     use httpmock::MockServer;
     use httpmock::prelude::*;
-    use serde_json::json;
 
     use crate::solscan::SolscanAPI;
 

@@ -7,7 +7,6 @@ mod test_account_account {
 
     use crate::solscan::SolscanAPI;
     use crate::tests::test_endpoints::sample_data::sample_account_account::SAMPLE_ACCOUNT_ACCOUNT;
-    use crate::tests::test_endpoints::sample_data::sample_account_stake_account::SAMPLE_ACCOUNT_STAKE_ACCOUNT;
 
     #[tokio::test]
     async fn test_account_account_success() {
