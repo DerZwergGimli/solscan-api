@@ -1,3 +1,5 @@
+#![allow(unused_variables)]
+
 pub const SAMPLE_BLOCK_BLOCK: &str = r#"
 {
   "currentSlot": 140604012,

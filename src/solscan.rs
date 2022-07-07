@@ -67,6 +67,7 @@ impl SolscanAPI {
                     SolscanEndpoints::BlockTransactions => endpoint.value().to_owned() + "?" + &*format!("block={}", block.unwrap()) + &*format!("&offset={}", offset.unwrap_or(0)) + &*format!("&limit={}", limit.unwrap_or(0)),
                     SolscanEndpoints::Block => endpoint.value().to_owned() + "/" + &*format!("{}", block.unwrap_or(0)),
                     SolscanEndpoints::TransactionLast => endpoint.value().to_owned() + "?" + &*format!("limit={}", limit.unwrap_or(10)),
+                    SolscanEndpoints::Transaction => endpoint.value().to_owned() + "/" + &*account.unwrap_or("".to_string()),
                     _ => { "none".to_string() }
                 }
             ).await
@@ -111,6 +112,9 @@ impl SolscanAPI {
     //region Transaction
     pub async fn get_transaction_last(&self, limit: i64) -> Result<Vec<Transaction>, SolscanError> {
         self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::TransactionLast, None, None, None, Some(limit)).await
+    }
+    pub async fn get_transaction(&self, signature: String) -> Result<Transaction, SolscanError> {
+        self.solscan_fetch::<Transaction>(SolscanEndpoints::Transaction, Some(signature), None, None, None).await
     }
     //endregion
     pub async fn get_account_tokens(&self, account: &str) -> Result<Vec<Token>, SolscanError> {

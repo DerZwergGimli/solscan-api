@@ -36,7 +36,7 @@ impl SolscanEndpoints {
             SolscanEndpoints::Block => "/block",
             //Transaction
             SolscanEndpoints::TransactionLast => "/transaction/last",
-            SolscanEndpoints::Transaction => "/transaction/",
+            SolscanEndpoints::Transaction => "/transaction",
             SolscanEndpoints::AccountTokens => "/account/tokens?account=",
             //Account
             SolscanEndpoints::AccountTransaction => "/account/transactions",
@@ -50,7 +50,7 @@ impl SolscanEndpoints {
             SolscanEndpoints::TokenMeta => "/token/meta",
             SolscanEndpoints::TokenList => "/token/list",
             //Market
-            SolscanEndpoints::MarketToken => "/market/token/",
+            SolscanEndpoints::MarketToken => "/market/token",
             //ChainInformation
             SolscanEndpoints::ChainInfo => "/chaininfo/",
             //Tools
