@@ -33,7 +33,7 @@ impl SolscanEndpoints {
             //Block
             SolscanEndpoints::BlockLast => "/block/last",
             SolscanEndpoints::BlockTransactions => "/block/transactions",
-            SolscanEndpoints::Block => "/block/",
+            SolscanEndpoints::Block => "/block",
             //Transaction
             SolscanEndpoints::TransactionLast => "/transaction/last",
             SolscanEndpoints::Transaction => "/transaction/",
