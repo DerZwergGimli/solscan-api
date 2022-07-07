@@ -6,3 +6,4 @@ pub mod account_info;
 pub mod token_holder;
 pub mod token_meta;
 pub mod token_market_item;
+pub mod chain_info;

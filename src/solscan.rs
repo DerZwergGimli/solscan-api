@@ -7,6 +7,7 @@ use crate::enums::solscan_errors::SolscanError;
 use crate::r#const::SOLSCANBASEURL;
 use crate::structs::account_info::AccountInfo;
 use crate::structs::block::Block;
+use crate::structs::chain_info::ChainInfo;
 use crate::structs::token::Token;
 use crate::structs::token_holder::TokenHolders;
 use crate::structs::token_market_item::TokenMarketItem;
@@ -66,7 +67,6 @@ impl SolscanAPI {
     pub async fn solscan_fetch<T: DeserializeOwned>(&self, endpoint: SolscanEndpoints, url_endpoint: &str) -> Result<T, SolscanError> {
         match {
             self.fetch(
-                //TODO: Make sure that all Endpoints are implemented correctly: example: /account/transaction missing beforeHash
                 match endpoint {
                     SolscanEndpoints::BlockLast => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::BlockTransactions => endpoint.value().to_owned() + url_endpoint,
@@ -81,6 +81,7 @@ impl SolscanAPI {
                     SolscanEndpoints::TokenHolders => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::TokenMeta => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::MarketToken => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::ChainInfo => endpoint.value().to_owned() + url_endpoint,
                     _ => { "none".to_string() }
                 }
             ).await
@@ -210,6 +211,13 @@ impl SolscanAPI {
     pub async fn get_market_token(&self, account: &str) -> Result<TokenMarketItem, SolscanError> {
         let url_endpoint: String = format!("/{}", account);
         self.solscan_fetch::<TokenMarketItem>(SolscanEndpoints::MarketToken, url_endpoint.as_str()).await
+    }
+    //endregion
+
+    //region ChainInfo
+    pub async fn get_chain_info(&self) -> Result<ChainInfo, SolscanError> {
+        let url_endpoint: String = format!("/");
+        self.solscan_fetch::<ChainInfo>(SolscanEndpoints::ChainInfo, url_endpoint.as_str()).await
     }
     //endregion
 }

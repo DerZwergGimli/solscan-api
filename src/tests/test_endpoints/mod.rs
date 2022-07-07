@@ -13,3 +13,4 @@ mod test_account_account;
 mod test_token_holders;
 mod test_token_meta;
 mod test_market_token;
+mod test_chain_info;
