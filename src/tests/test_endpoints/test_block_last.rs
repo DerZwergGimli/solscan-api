@@ -24,7 +24,7 @@ mod test_block_last {
         });
 
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
-        let result = solscan_api.get_block_last().await.unwrap();
+        let result = solscan_api.get_block_last(Some(10)).await.unwrap();
         assert_eq!(result.len(), 10)
     }
 }

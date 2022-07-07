@@ -7,6 +7,6 @@ mod test_api {
     #[tokio::test]
     async fn test_api_fetch_block_last() {
         let solscan_api = SolscanAPI::new();
-        let result = solscan_api.get_block_last().await.unwrap();
+        let result = solscan_api.get_block_last(None).await.unwrap();
     }
 }

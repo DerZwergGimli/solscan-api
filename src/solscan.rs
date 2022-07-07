@@ -59,18 +59,18 @@ impl SolscanAPI {
         }
     }
 
-    pub async fn solscan_fetch<T: DeserializeOwned>(&self, endpoint: SolscanEndpoints, account: Option<String>, extra_query: Option<String>, block: Option<i64>, offset: Option<i64>, limit: Option<i64>) -> Result<T, SolscanError> {
+    pub async fn solscan_fetch<T: DeserializeOwned>(&self, endpoint: SolscanEndpoints, url_endpoint: &str) -> Result<T, SolscanError> {
         match {
             self.fetch(
                 //TODO: Make sure that all Endpoints are implemented correctly: example: /account/transaction missing beforeHash
                 match endpoint {
-                    SolscanEndpoints::BlockLast => endpoint.value().to_owned(),
-                    SolscanEndpoints::BlockTransactions => endpoint.value().to_owned() + "?" + &*format!("block={}", block.unwrap()) + &*format!("&offset={}", offset.unwrap_or(0)) + &*format!("&limit={}", limit.unwrap_or(0)),
-                    SolscanEndpoints::Block => endpoint.value().to_owned() + "/" + &*format!("{}", block.unwrap_or(0)),
-                    SolscanEndpoints::TransactionLast => endpoint.value().to_owned() + "?" + &*format!("limit={}", limit.unwrap_or(10)),
-                    SolscanEndpoints::Transaction => endpoint.value().to_owned() + "/" + &*account.unwrap_or("".to_string()),
-                    SolscanEndpoints::AccountTokens => endpoint.value().to_owned() + "?" + &*format!("account={}", account.unwrap_or("".to_string())),
-                    SolscanEndpoints::AccountTransaction => endpoint.value().to_owned() + "?" + &*format!("account={}", account.unwrap_or("".to_string())) + &*format!("&limit={}", limit.unwrap_or(10)),
+                    SolscanEndpoints::BlockLast => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::BlockTransactions => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::Block => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::TransactionLast => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::Transaction => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::AccountTokens => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::AccountTransaction => endpoint.value().to_owned() + url_endpoint,
                     _ => { "none".to_string() }
                 }
             ).await
@@ -101,32 +101,57 @@ impl SolscanAPI {
 
 
     //region Block
-    pub async fn get_block_last(&self) -> Result<Vec<Block>, SolscanError> {
-        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockLast, None, None, None, None, None).await
+    pub async fn get_block_last(&self, limit: Option<i64>) -> Result<Vec<Block>, SolscanError> {
+        let mut url_endpoint: String = "".to_string();
+        if limit.is_some() {
+            url_endpoint += &*format!("?limit={}", limit.unwrap());
+        }
+        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockLast, url_endpoint.as_str()).await
     }
-    pub async fn get_block_transactions(&self, block: i64, offset: i64, limit: i64) -> Result<Vec<Block>, SolscanError> {
-        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockTransactions, None, None, Some(block), Some(offset), Some(limit)).await
+    pub async fn get_block_transactions(&self, block: i64, offset: Option<i64>, limit: Option<i64>) -> Result<Vec<Block>, SolscanError> {
+        let mut url_endpoint: String = format!("?block={}", block);
+        if offset.is_some() {
+            url_endpoint += &*format!("&offset={}", offset.unwrap());
+        }
+        if limit.is_some() {
+            url_endpoint += &*format!("&limit={}", limit.unwrap());
+        }
+        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockTransactions, url_endpoint.as_str()).await
     }
     pub async fn get_block_block(&self, block: i64) -> Result<Block, SolscanError> {
-        self.solscan_fetch::<Block>(SolscanEndpoints::Block, None, None, Some(block), None, None).await
+        let mut url_endpoint: String = format!("/{}", block);
+        self.solscan_fetch::<Block>(SolscanEndpoints::Block, url_endpoint.as_str()).await
     }
     //endregion
 
     //region Transaction
-    pub async fn get_transaction_last(&self, limit: i64) -> Result<Vec<Transaction>, SolscanError> {
-        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::TransactionLast, None, None, None, None, Some(limit)).await
+    pub async fn get_transaction_last(&self, limit: Option<i64>) -> Result<Vec<Transaction>, SolscanError> {
+        let mut url_endpoint: String = "".to_string();
+        if limit.is_some() {
+            url_endpoint += &*format!("?limit={}", limit.unwrap())
+        }
+        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::TransactionLast, url_endpoint.as_str()).await
     }
     pub async fn get_transaction(&self, signature: &str) -> Result<Transaction, SolscanError> {
-        self.solscan_fetch::<Transaction>(SolscanEndpoints::Transaction, Some(signature.to_string()), None, None, None, None).await
+        let mut url_endpoint: String = format!("/{}", signature);
+        self.solscan_fetch::<Transaction>(SolscanEndpoints::Transaction, url_endpoint.as_str()).await
     }
     //endregion
 
     //region Transaction
     pub async fn get_account_tokens(&self, account: &str) -> Result<Vec<Token>, SolscanError> {
-        self.solscan_fetch::<Vec<Token>>(SolscanEndpoints::AccountTokens, Some(account.to_string()), None, None, None, None).await
+        let mut url_endpoint: String = format!("?account={}", account);
+        self.solscan_fetch::<Vec<Token>>(SolscanEndpoints::AccountTokens, url_endpoint.as_str()).await
     }
     pub async fn get_account_transactions(&self, account: &str, before_hash: Option<String>, limit: Option<i64>) -> Result<Vec<Transaction>, SolscanError> {
-        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountTransaction, Some(account.to_string()), before_hash, None, None, limit).await
+        let mut url_endpoint: String = format!("?account={}", account);
+        if before_hash.is_some() {
+            url_endpoint += &*format!("&beforeHash={}", before_hash.unwrap())
+        }
+        if limit.is_some() {
+            url_endpoint += &*format!("&limit={}", limit.unwrap())
+        }
+        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountTransaction, url_endpoint.as_str()).await
     }
     //endregion
 }

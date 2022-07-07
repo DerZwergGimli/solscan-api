@@ -26,7 +26,7 @@ mod test_transaction_last {
         });
 
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
-        let result = solscan_api.get_transaction_last(10).await.unwrap();
+        let result = solscan_api.get_transaction_last(Some(10)).await.unwrap();
         assert_eq!(result.len(), 10)
     }
 }

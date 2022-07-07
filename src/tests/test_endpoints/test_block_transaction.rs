@@ -28,7 +28,7 @@ mod test_block_transaction {
         });
 
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
-        let result = solscan_api.get_block_transactions(140604012, 0, 10).await.unwrap();
+        let result = solscan_api.get_block_transactions(140604012, Some(0), Some(10)).await.unwrap();
         assert_eq!(result.len(), 10)
     }
 }
