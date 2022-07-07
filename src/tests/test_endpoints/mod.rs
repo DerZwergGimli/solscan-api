@@ -11,3 +11,5 @@ mod test_account_spl_transfer;
 mod test_account_export_transactions;
 mod test_account_account;
 mod test_token_holders;
+mod test_token_meta;
+mod test_market_token;

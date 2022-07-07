@@ -9,6 +9,8 @@ use crate::structs::account_info::AccountInfo;
 use crate::structs::block::Block;
 use crate::structs::token::Token;
 use crate::structs::token_holder::TokenHolders;
+use crate::structs::token_market_item::TokenMarketItem;
+use crate::structs::token_meta::TokenMeta;
 use crate::structs::transaction::Transaction;
 
 pub struct SolscanAPI {
@@ -45,17 +47,17 @@ impl SolscanAPI {
                     match response.text().await {
                         Ok(text) => { Ok(text) }
                         Err(e) => {
-                            error!("{:?}", e);
+                            println!("{:?}", e);
                             Err(SolscanError::APICConversionError)
                         }
                     }
                 } else {
-                    error!("API-Status Code is: {:?}", response.status());
+                    println!("API-Status Code is: {:?}", response.status());
                     Err(SolscanError::APIWrongStatusCode)
                 }
             }
             Err(e) => {
-                error!("{:?}", e);
+                println!("{:?}", e);
                 Err(SolscanError::APIError)
             }
         }
@@ -77,6 +79,8 @@ impl SolscanAPI {
                     SolscanEndpoints::AccountSPLTransfer => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::Account => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::TokenHolders => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::TokenMeta => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::MarketToken => endpoint.value().to_owned() + url_endpoint,
                     _ => { "none".to_string() }
                 }
             ).await
@@ -195,6 +199,17 @@ impl SolscanAPI {
             url_endpoint += &*format!("&limit={}", limit.unwrap())
         }
         self.solscan_fetch::<TokenHolders>(SolscanEndpoints::TokenHolders, url_endpoint.as_str()).await
+    }
+    pub async fn get_token_meta(&self, account: &str) -> Result<TokenMeta, SolscanError> {
+        let url_endpoint: String = format!("?tokenAddress={}", account);
+        self.solscan_fetch::<TokenMeta>(SolscanEndpoints::TokenMeta, url_endpoint.as_str()).await
+    }
+    //endregion
+
+    //region MarketToken
+    pub async fn get_market_token(&self, account: &str) -> Result<TokenMarketItem, SolscanError> {
+        let url_endpoint: String = format!("/{}", account);
+        self.solscan_fetch::<TokenMarketItem>(SolscanEndpoints::MarketToken, url_endpoint.as_str()).await
     }
     //endregion
 }
