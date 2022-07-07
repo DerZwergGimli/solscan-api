@@ -33,11 +33,11 @@
 
 ### Market
 
-- [ ] ``/market/token/{tokenAddress}``
+- [x] ``/market/token/{tokenAddress}``
 
 ### ChainInfo
 
-- [ ] ``/chaininfo/``
+- [x] ``/chaininfo/``
 
 ### Tools
 
