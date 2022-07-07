@@ -8,6 +8,7 @@ use crate::r#const::SOLSCANBASEURL;
 use crate::structs::account_info::AccountInfo;
 use crate::structs::block::Block;
 use crate::structs::token::Token;
+use crate::structs::token_holder::TokenHolders;
 use crate::structs::transaction::Transaction;
 
 pub struct SolscanAPI {
@@ -75,6 +76,7 @@ impl SolscanAPI {
                     SolscanEndpoints::AccountStakeAccounts => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::AccountSPLTransfer => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::Account => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::TokenHolders => endpoint.value().to_owned() + url_endpoint,
                     _ => { "none".to_string() }
                 }
             ).await
@@ -180,6 +182,19 @@ impl SolscanAPI {
     pub async fn get_account_account(&self, account: &str) -> Result<AccountInfo, SolscanError> {
         let url_endpoint: String = format!("/{}", account);
         self.solscan_fetch::<AccountInfo>(SolscanEndpoints::Account, url_endpoint.as_str()).await
+    }
+    //endregion
+
+    //region Transaction
+    pub async fn get_token_holders(&self, account: &str, offset: Option<i64>, limit: Option<i64>) -> Result<TokenHolders, SolscanError> {
+        let mut url_endpoint: String = format!("?tokenAddress={}", account);
+        if offset.is_some() {
+            url_endpoint += &*format!("&offset={}", offset.unwrap())
+        }
+        if limit.is_some() {
+            url_endpoint += &*format!("&limit={}", limit.unwrap())
+        }
+        self.solscan_fetch::<TokenHolders>(SolscanEndpoints::TokenHolders, url_endpoint.as_str()).await
     }
     //endregion
 }
