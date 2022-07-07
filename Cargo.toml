@@ -6,8 +6,16 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+env_logger = "*"
+log = { version = "0.4.17" }
 tokio = { version = "1.18.2", features = ["full"] }
 reqwest = { version = "0.11.11" }
 serde = { version = "1.0.138", features = ["derive"] }
 serde_derive = { version = "1.0.138" }
 serde_json = { version = "1.0.82" }
+
+
+[dev-dependencies]
+env_logger = "*"
+test-env-log = "0.2.8"
+httpmock = { version = "0.6" }

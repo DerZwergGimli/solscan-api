@@ -3,8 +3,8 @@ use serde_derive::{Deserialize, Serialize};
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Block {
     #[serde(rename = "currentSlot")]
-    pub current_slot: i64,
-    pub result: Result,
+    pub current_slot: Option<i64>,
+    pub result: Option<Result>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
