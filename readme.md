@@ -1,5 +1,7 @@
 # SOLSCAN API WRAPPER
 
+![buid-test](https://github.com/DerZwergGimli/solscan-api/actions/workflows/build-test.yml/badge.svg)
+
 ``unoffical``
 
 # Implemented Endpoints
