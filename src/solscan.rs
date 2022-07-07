@@ -121,7 +121,7 @@ impl SolscanAPI {
         self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockTransactions, url_endpoint.as_str()).await
     }
     pub async fn get_block_block(&self, block: i64) -> Result<Block, SolscanError> {
-        let mut url_endpoint: String = format!("/{}", block);
+        let url_endpoint: String = format!("/{}", block);
         self.solscan_fetch::<Block>(SolscanEndpoints::Block, url_endpoint.as_str()).await
     }
     //endregion
@@ -135,14 +135,14 @@ impl SolscanAPI {
         self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::TransactionLast, url_endpoint.as_str()).await
     }
     pub async fn get_transaction(&self, signature: &str) -> Result<Transaction, SolscanError> {
-        let mut url_endpoint: String = format!("/{}", signature);
+        let url_endpoint: String = format!("/{}", signature);
         self.solscan_fetch::<Transaction>(SolscanEndpoints::Transaction, url_endpoint.as_str()).await
     }
     //endregion
 
     //region Transaction
     pub async fn get_account_tokens(&self, account: &str) -> Result<Vec<Token>, SolscanError> {
-        let mut url_endpoint: String = format!("?account={}", account);
+        let url_endpoint: String = format!("?account={}", account);
         self.solscan_fetch::<Vec<Token>>(SolscanEndpoints::AccountTokens, url_endpoint.as_str()).await
     }
     pub async fn get_account_transactions(&self, account: &str, before_hash: Option<String>, limit: Option<i64>) -> Result<Vec<Transaction>, SolscanError> {
@@ -156,16 +156,16 @@ impl SolscanAPI {
         self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountTransaction, url_endpoint.as_str()).await
     }
     pub async fn get_account_stake_accounts(&self, account: &str) -> Result<Vec<Token>, SolscanError> {
-        let mut url_endpoint: String = format!("?account={}", account);
+        let url_endpoint: String = format!("?account={}", account);
         self.solscan_fetch::<Vec<Token>>(SolscanEndpoints::AccountStakeAccounts, url_endpoint.as_str()).await
     }
-    pub async fn get_account_spl_transfer(&self, account: &str, formTime: Option<u64>, toTime: Option<u64>, offset: Option<i64>, limit: Option<i64>) -> Result<Vec<Transaction>, SolscanError> {
+    pub async fn get_account_spl_transfer(&self, account: &str, form_time: Option<u64>, to_time: Option<u64>, offset: Option<i64>, limit: Option<i64>) -> Result<Vec<Transaction>, SolscanError> {
         let mut url_endpoint: String = format!("?account={}", account);
-        if formTime.is_some() {
-            url_endpoint += &*format!("&formTime={}", formTime.unwrap())
+        if form_time.is_some() {
+            url_endpoint += &*format!("&form_time={}", form_time.unwrap())
         }
-        if toTime.is_some() {
-            url_endpoint += &*format!("&toTime={}", toTime.unwrap())
+        if to_time.is_some() {
+            url_endpoint += &*format!("&to_time={}", to_time.unwrap())
         }
         if offset.is_some() {
             url_endpoint += &*format!("&offset={}", offset.unwrap())

@@ -4,11 +4,8 @@
 mod test_transaction_signature {
     use httpmock::MockServer;
     use httpmock::prelude::*;
-    use serde_json::json;
 
-    use crate::enums::solscan_endpoints::SolscanEndpoints;
     use crate::solscan::SolscanAPI;
-    use crate::structs::transaction::Transaction;
     use crate::tests::test_endpoints::sample_data::sample_transaction_signature::SAMPLE_TRANSACTION_SIGNATURE;
 
     #[tokio::test]

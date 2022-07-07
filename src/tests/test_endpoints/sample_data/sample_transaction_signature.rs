@@ -1,5 +1,4 @@
-#![allow(unused_variables)]
-
+#[allow(dead_code)]
 pub const SAMPLE_TRANSACTION_SIGNATURE: &str = r#"
 {
   "blockTime": 1634537205,

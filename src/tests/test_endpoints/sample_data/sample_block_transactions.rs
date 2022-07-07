@@ -1,5 +1,4 @@
-#![allow(unused_must_use)]
-
+#[allow(dead_code)]
 pub const SAMPLE_BLOCK_TRANSACTIONS: &str = r#"
         [
   {

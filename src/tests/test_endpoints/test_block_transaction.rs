@@ -4,11 +4,8 @@
 mod test_block_transaction {
     use httpmock::MockServer;
     use httpmock::prelude::*;
-    use serde_json::json;
 
-    use crate::enums::solscan_endpoints::SolscanEndpoints;
     use crate::solscan::SolscanAPI;
-    use crate::structs::transaction::Transaction;
     use crate::tests::test_endpoints::sample_data::sample_block_transactions::SAMPLE_BLOCK_TRANSACTIONS;
 
     #[tokio::test]

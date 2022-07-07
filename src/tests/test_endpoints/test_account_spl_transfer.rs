@@ -4,12 +4,8 @@
 mod test_account_spl_transfer {
     use httpmock::MockServer;
     use httpmock::prelude::*;
-    use serde_json::json;
-    use test_env_log::test;
 
-    use crate::enums::solscan_endpoints::SolscanEndpoints;
     use crate::solscan::SolscanAPI;
-    use crate::structs::transaction::Transaction;
     use crate::tests::test_endpoints::sample_data::sample_account_stake_account::SAMPLE_ACCOUNT_STAKE_ACCOUNT;
 
     #[tokio::test]
@@ -26,6 +22,6 @@ mod test_account_spl_transfer {
 
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
         let result = solscan_api.get_account_stake_accounts("So11111111111111111111111111111111111111112").await.unwrap();
-        //assert!(result.unwrap())
+        assert_eq!(result.len(), 6)
     }
 }
