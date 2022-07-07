@@ -5,6 +5,7 @@ use serde::de::DeserializeOwned;
 use crate::enums::solscan_endpoints::SolscanEndpoints;
 use crate::enums::solscan_errors::SolscanError;
 use crate::r#const::SOLSCANBASEURL;
+use crate::structs::account_info::AccountInfo;
 use crate::structs::block::Block;
 use crate::structs::token::Token;
 use crate::structs::transaction::Transaction;
@@ -73,6 +74,7 @@ impl SolscanAPI {
                     SolscanEndpoints::AccountTransaction => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::AccountStakeAccounts => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::AccountSPLTransfer => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::Account => endpoint.value().to_owned() + url_endpoint,
                     _ => { "none".to_string() }
                 }
             ).await
@@ -174,6 +176,10 @@ impl SolscanAPI {
             url_endpoint += &*format!("&limit={}", limit.unwrap())
         }
         self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountSPLTransfer, url_endpoint.as_str()).await
+    }
+    pub async fn get_account_account(&self, account: &str) -> Result<AccountInfo, SolscanError> {
+        let url_endpoint: String = format!("/account/{}", account);
+        self.solscan_fetch::<AccountInfo>(SolscanEndpoints::Account, url_endpoint.as_str()).await
     }
     //endregion
 }

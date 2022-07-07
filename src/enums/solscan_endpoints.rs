@@ -44,7 +44,7 @@ impl SolscanEndpoints {
             SolscanEndpoints::AccountSPLTransfer => "/account/splTransfers",
             SolscanEndpoints::AccountSolTransfers => "/account/solTransfers",
             SolscanEndpoints::AccountExportTransactions => "/account/exportTransactions",
-            SolscanEndpoints::Account => "/account/",
+            SolscanEndpoints::Account => "/account",
             //Token
             SolscanEndpoints::TokenHolders => "/token/holders",
             SolscanEndpoints::TokenMeta => "/token/meta",
@@ -52,7 +52,7 @@ impl SolscanEndpoints {
             //Market
             SolscanEndpoints::MarketToken => "/market/token",
             //ChainInformation
-            SolscanEndpoints::ChainInfo => "/chaininfo/",
+            SolscanEndpoints::ChainInfo => "/chaininfo",
             //Tools
             SolscanEndpoints::ToolsInspect => "Tools",
         }
