@@ -21,7 +21,7 @@ mod test_account_stake_accounts {
         });
 
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
-        let result = solscan_api.get_account_stake_accounts("55bmPBVG1xNHSmQ9iqzvm78Gvr8rE9wiG48MLQgJ1ywA").await.unwrap();
-        //assert!(result.unwrap())
+        let result = solscan_api.get_account_stake_accounts("55bmPBVG1xNHSmQ9iqzvm78Gvr8rE9wiG48MLQgJ1ywA").await;
+        assert_eq!(result.is_ok(), true)
     }
 }

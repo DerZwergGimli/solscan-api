@@ -1,7 +1,7 @@
 #![allow(unused_variables)]
 
 #[cfg(test)]
-mod test_account_export_transactions {
+mod test_account_account {
     use httpmock::MockServer;
     use httpmock::prelude::*;
 
@@ -10,7 +10,7 @@ mod test_account_export_transactions {
     use crate::tests::test_endpoints::sample_data::sample_account_stake_account::SAMPLE_ACCOUNT_STAKE_ACCOUNT;
 
     #[tokio::test]
-    async fn test_account_export_transactions_success() {
+    async fn test_account_account_success() {
         let server = MockServer::start();
         let mock_block = server.mock(|when, then| {
             when.method(GET)

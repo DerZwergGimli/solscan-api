@@ -178,7 +178,7 @@ impl SolscanAPI {
         self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountSPLTransfer, url_endpoint.as_str()).await
     }
     pub async fn get_account_account(&self, account: &str) -> Result<AccountInfo, SolscanError> {
-        let url_endpoint: String = format!("/account/{}", account);
+        let url_endpoint: String = format!("/{}", account);
         self.solscan_fetch::<AccountInfo>(SolscanEndpoints::Account, url_endpoint.as_str()).await
     }
     //endregion
