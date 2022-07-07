@@ -6,3 +6,5 @@ mod test_transaction_last;
 mod test_transaction_signature;
 mod test_account_tokens;
 mod test_account_transactions;
+mod test_account_stake_accounts;
+mod test_account_spl_transfer;

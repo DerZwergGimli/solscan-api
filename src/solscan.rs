@@ -71,6 +71,8 @@ impl SolscanAPI {
                     SolscanEndpoints::Transaction => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::AccountTokens => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::AccountTransaction => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::AccountStakeAccounts => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::AccountSPLTransfer => endpoint.value().to_owned() + url_endpoint,
                     _ => { "none".to_string() }
                 }
             ).await
@@ -152,6 +154,26 @@ impl SolscanAPI {
             url_endpoint += &*format!("&limit={}", limit.unwrap())
         }
         self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountTransaction, url_endpoint.as_str()).await
+    }
+    pub async fn get_account_stake_accounts(&self, account: &str) -> Result<Vec<Token>, SolscanError> {
+        let mut url_endpoint: String = format!("?account={}", account);
+        self.solscan_fetch::<Vec<Token>>(SolscanEndpoints::AccountStakeAccounts, url_endpoint.as_str()).await
+    }
+    pub async fn get_account_spl_transfer(&self, account: &str, formTime: Option<u64>, toTime: Option<u64>, offset: Option<i64>, limit: Option<i64>) -> Result<Vec<Transaction>, SolscanError> {
+        let mut url_endpoint: String = format!("?account={}", account);
+        if formTime.is_some() {
+            url_endpoint += &*format!("&formTime={}", formTime.unwrap())
+        }
+        if toTime.is_some() {
+            url_endpoint += &*format!("&toTime={}", toTime.unwrap())
+        }
+        if offset.is_some() {
+            url_endpoint += &*format!("&offset={}", offset.unwrap())
+        }
+        if limit.is_some() {
+            url_endpoint += &*format!("&limit={}", limit.unwrap())
+        }
+        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountSPLTransfer, url_endpoint.as_str()).await
     }
     //endregion
 }
