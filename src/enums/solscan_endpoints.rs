@@ -37,7 +37,7 @@ impl SolscanEndpoints {
             //Transaction
             SolscanEndpoints::TransactionLast => "/transaction/last",
             SolscanEndpoints::Transaction => "/transaction",
-            SolscanEndpoints::AccountTokens => "/account/tokens?account=",
+            SolscanEndpoints::AccountTokens => "/account/tokens",
             //Account
             SolscanEndpoints::AccountTransaction => "/account/transactions",
             SolscanEndpoints::AccountStakeAccounts => "/account/stakeAccounts",

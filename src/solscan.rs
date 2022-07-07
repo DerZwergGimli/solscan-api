@@ -59,15 +59,18 @@ impl SolscanAPI {
         }
     }
 
-    pub async fn solscan_fetch<T: DeserializeOwned>(&self, endpoint: SolscanEndpoints, account: Option<String>, block: Option<i64>, offset: Option<i64>, limit: Option<i64>) -> Result<T, SolscanError> {
+    pub async fn solscan_fetch<T: DeserializeOwned>(&self, endpoint: SolscanEndpoints, account: Option<String>, extra_query: Option<String>, block: Option<i64>, offset: Option<i64>, limit: Option<i64>) -> Result<T, SolscanError> {
         match {
             self.fetch(
+                //TODO: Make sure that all Endpoints are implemented correctly: example: /account/transaction missing beforeHash
                 match endpoint {
                     SolscanEndpoints::BlockLast => endpoint.value().to_owned(),
                     SolscanEndpoints::BlockTransactions => endpoint.value().to_owned() + "?" + &*format!("block={}", block.unwrap()) + &*format!("&offset={}", offset.unwrap_or(0)) + &*format!("&limit={}", limit.unwrap_or(0)),
                     SolscanEndpoints::Block => endpoint.value().to_owned() + "/" + &*format!("{}", block.unwrap_or(0)),
                     SolscanEndpoints::TransactionLast => endpoint.value().to_owned() + "?" + &*format!("limit={}", limit.unwrap_or(10)),
                     SolscanEndpoints::Transaction => endpoint.value().to_owned() + "/" + &*account.unwrap_or("".to_string()),
+                    SolscanEndpoints::AccountTokens => endpoint.value().to_owned() + "?" + &*format!("account={}", account.unwrap_or("".to_string())),
+                    SolscanEndpoints::AccountTransaction => endpoint.value().to_owned() + "?" + &*format!("account={}", account.unwrap_or("".to_string())) + &*format!("&limit={}", limit.unwrap_or(10)),
                     _ => { "none".to_string() }
                 }
             ).await
@@ -99,27 +102,33 @@ impl SolscanAPI {
 
     //region Block
     pub async fn get_block_last(&self) -> Result<Vec<Block>, SolscanError> {
-        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockLast, None, None, None, None).await
+        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockLast, None, None, None, None, None).await
     }
     pub async fn get_block_transactions(&self, block: i64, offset: i64, limit: i64) -> Result<Vec<Block>, SolscanError> {
-        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockTransactions, None, Some(block), Some(offset), Some(limit)).await
+        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockTransactions, None, None, Some(block), Some(offset), Some(limit)).await
     }
     pub async fn get_block_block(&self, block: i64) -> Result<Block, SolscanError> {
-        self.solscan_fetch::<Block>(SolscanEndpoints::Block, None, Some(block), None, None).await
+        self.solscan_fetch::<Block>(SolscanEndpoints::Block, None, None, Some(block), None, None).await
     }
     //endregion
 
     //region Transaction
     pub async fn get_transaction_last(&self, limit: i64) -> Result<Vec<Transaction>, SolscanError> {
-        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::TransactionLast, None, None, None, Some(limit)).await
+        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::TransactionLast, None, None, None, None, Some(limit)).await
     }
-    pub async fn get_transaction(&self, signature: String) -> Result<Transaction, SolscanError> {
-        self.solscan_fetch::<Transaction>(SolscanEndpoints::Transaction, Some(signature), None, None, None).await
+    pub async fn get_transaction(&self, signature: &str) -> Result<Transaction, SolscanError> {
+        self.solscan_fetch::<Transaction>(SolscanEndpoints::Transaction, Some(signature.to_string()), None, None, None, None).await
     }
     //endregion
+
+    //region Transaction
     pub async fn get_account_tokens(&self, account: &str) -> Result<Vec<Token>, SolscanError> {
-        self.solscan_fetch::<Vec<Token>>(SolscanEndpoints::AccountTokens, Some(account.to_string()), None, None, None).await
+        self.solscan_fetch::<Vec<Token>>(SolscanEndpoints::AccountTokens, Some(account.to_string()), None, None, None, None).await
     }
+    pub async fn get_account_transactions(&self, account: &str, before_hash: Option<String>, limit: Option<i64>) -> Result<Vec<Transaction>, SolscanError> {
+        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountTransaction, Some(account.to_string()), before_hash, None, None, limit).await
+    }
+    //endregion
 }
 
 #[cfg(test)]

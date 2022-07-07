@@ -1,4 +1,4 @@
-#![allow(unused_variables)]
+#![allow(unused_must_use)]
 
 pub const SAMPLE_BLOCK_TRANSACTIONS: &str = r#"
         [

@@ -1,29 +1,31 @@
 #![allow(unused_variables)]
 
 #[cfg(test)]
-mod test_transaction_signature {
+mod test_account_tokens {
     use httpmock::MockServer;
     use httpmock::prelude::*;
     use serde_json::json;
+    use test_env_log::test;
 
     use crate::enums::solscan_endpoints::SolscanEndpoints;
     use crate::solscan::SolscanAPI;
     use crate::structs::transaction::Transaction;
-    use crate::tests::test_endpoints::sample_data::sample_transaction_signature::SAMPLE_TRANSACTION_SIGNATURE;
+    use crate::tests::test_endpoints::sample_data::sample_account_tokens::SAMPLE_ACCOUNT_TOKENS;
 
     #[tokio::test]
-    async fn test_transaction_signature_success() {
+    async fn test_account_tokens_success() {
         let server = MockServer::start();
         let mock_block = server.mock(|when, then| {
             when.method(GET)
-                .path("/transaction/T4ipYTjKUqHQpfuA8ZM5E4iJag9kX9nGhjbY974oq2ucyYRL6eWhqTjtmk3cqfqTSu8Qdce33vzKQd7bWEX3H21");
+                .path("/account/tokens")
+                .query_param("account", "So11111111111111111111111111111111111111112");
             then.status(200)
                 .header("content-type", "text/html")
-                .body(SAMPLE_TRANSACTION_SIGNATURE)
-            ;
+                .body(SAMPLE_ACCOUNT_TOKENS);
         });
 
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
-        let result = solscan_api.get_transaction("T4ipYTjKUqHQpfuA8ZM5E4iJag9kX9nGhjbY974oq2ucyYRL6eWhqTjtmk3cqfqTSu8Qdce33vzKQd7bWEX3H21").await.unwrap();
+        let result = solscan_api.get_account_tokens("So11111111111111111111111111111111111111112").await.unwrap();
+        //assert!(result.unwrap())
     }
 }

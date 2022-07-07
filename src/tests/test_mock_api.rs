@@ -5,37 +5,36 @@ mod test_mock_api {
     use httpmock::MockServer;
     use httpmock::prelude::*;
     use serde_json::json;
-    use test_env_log::test;
 
     use crate::enums::solscan_endpoints::SolscanEndpoints;
     use crate::solscan::SolscanAPI;
     use crate::structs::transaction::Transaction;
 
     /*    fn build_mock_server_block() -> MockServer {
-                            let server = MockServer::start();
+                                let server = MockServer::start();
 
-                            let mock_block = server.mock(|when, then| {
-                                when.method(GET)
-                                    .path("/block/last");
-                                then.status(200)
-                                    .header("content-type", "text/html")
-                                    .json_body(json!([
-                                                              {
-                                                                "currentSlot": 140470240,
-                                                                "result": {
-                                                                  "blockHeight": 126891281,
-                                                                  "blockTime": 1657124585,
-                                                                  "blockhash": "HijFFgfAfeawaKUZ3UdBSw5Qyi5EfhwszH6S9CkMa6nC",
-                                                                  "parentSlot": 140470239,
-                                                                  "previousBlockhash": "FjxsV8xmR5AB4AU8sBFJDvm8Cexgx8BeXaiarNvkKFH",
-                                                                  "feeRewards": 5883517,
-                                                                  "validator": "2mMGsb5uy1Q4Dvezr8HK2E8SJoChcb2X7b61tJPaVHHd",
-                                                                  "transactionCount": 2322
-                                                                }
-                                                              }]));
-                            });
-                            server
-                        }*/
+                                let mock_block = server.mock(|when, then| {
+                                    when.method(GET)
+                                        .path("/block/last");
+                                    then.status(200)
+                                        .header("content-type", "text/html")
+                                        .json_body(json!([
+                                                                  {
+                                                                    "currentSlot": 140470240,
+                                                                    "result": {
+                                                                      "blockHeight": 126891281,
+                                                                      "blockTime": 1657124585,
+                                                                      "blockhash": "HijFFgfAfeawaKUZ3UdBSw5Qyi5EfhwszH6S9CkMa6nC",
+                                                                      "parentSlot": 140470239,
+                                                                      "previousBlockhash": "FjxsV8xmR5AB4AU8sBFJDvm8Cexgx8BeXaiarNvkKFH",
+                                                                      "feeRewards": 5883517,
+                                                                      "validator": "2mMGsb5uy1Q4Dvezr8HK2E8SJoChcb2X7b61tJPaVHHd",
+                                                                      "transactionCount": 2322
+                                                                    }
+                                                                  }]));
+                                });
+                                server
+                            }*/
 
     fn build_mock_server_account_tokens() -> MockServer {
         let server = MockServer::start();
