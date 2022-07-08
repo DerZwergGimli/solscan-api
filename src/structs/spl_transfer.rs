@@ -29,6 +29,7 @@ pub struct Datum {
     pub fee: Option<i64>,
     pub owner: Option<String>,
     pub balance: Option<Balance>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub symbol: Option<String>,
 }
 

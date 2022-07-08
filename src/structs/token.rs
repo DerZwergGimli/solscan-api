@@ -16,6 +16,7 @@ pub struct Token {
     pub rent_epoch: Option<i64>,
     pub lamports: Option<i64>,
     #[serde(rename = "tokenSymbol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub token_symbol: Option<String>,
 }
 

@@ -1,6 +1,4 @@
-#[allow(dead_code)]
-pub const SAMPLE_ACCOUNT_SPL_TRANSFER: &str = r#"{
-  {
+{
   "total": 23,
   "data": [
     {
@@ -217,4 +215,4 @@ pub const SAMPLE_ACCOUNT_SPL_TRANSFER: &str = r#"{
     }
   ]
 }
-        "#;
+
