@@ -2,7 +2,8 @@
 name = "solscan-api"
 version = "0.1.0"
 edition = "2021"
-
+description = "A Wrapper for the Solscan-API for fetching informations about SOL-Accounts and more..."
+license = "MIT"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -19,3 +20,12 @@ serde_json = { version = "1.0.82" }
 env_logger = "*"
 test-env-log = "0.2.8"
 httpmock = { version = "0.6" }
+json = { version = "0.12.4" }
+assert-json-diff = { version = "2.0.2" }
+
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3

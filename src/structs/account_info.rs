@@ -1,6 +1,6 @@
 use serde_derive::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct AccountInfo {
     pub lamports: i64,
     #[serde(rename = "ownerProgram")]
@@ -15,7 +15,7 @@ pub struct AccountInfo {
     pub token_info: TokenInfo,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, PartialEq)]
 pub struct TokenInfo {
     pub name: String,
     pub symbol: String,

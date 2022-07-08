@@ -2,8 +2,10 @@
 
 #[cfg(test)]
 mod test_account_account {
+    use assert_json_diff::{assert_json_eq, assert_json_include};
     use httpmock::MockServer;
     use httpmock::prelude::*;
+    use serde_json::json;
 
     use crate::solscan::SolscanAPI;
     use crate::tests::test_endpoints::sample_data::sample_account_account::SAMPLE_ACCOUNT_ACCOUNT;
@@ -20,7 +22,10 @@ mod test_account_account {
         });
 
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
-        let result = solscan_api.get_account_account("So11111111111111111111111111111111111111112").await;
-        assert_eq!(result.is_ok(), true)
+        let result = solscan_api.get_account_account("So11111111111111111111111111111111111111112").await.unwrap();
+
+        assert_json_eq!(json!(serde_json::to_string(&result).unwrap()), json!(SAMPLE_ACCOUNT_ACCOUNT))
+        //assert_eq!(serde_json::to_string(&result).unwrap(), serde_json::to_string(SAMPLE_ACCOUNT_ACCOUNT).unwrap())
+//        assert_eq!(format!("{:?}", result), format!("{:?}", SAMPLE_ACCOUNT_ACCOUNT))
     }
 }

@@ -1,3 +1,6 @@
+//! # The Solcan Wrapper
+//! This lib represent a wrapper for the SolcanAPI
+
 use reqwest::{Client, Error, StatusCode};
 use serde::de::DeserializeOwned;
 
@@ -75,7 +78,7 @@ impl SolscanAPI {
                     SolscanEndpoints::AccountTokens => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::AccountTransaction => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::AccountStakeAccounts => endpoint.value().to_owned() + url_endpoint,
-                    SolscanEndpoints::AccountSPLTransfer => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::AccountSPLTransfers => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::Account => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::TokenHolders => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::TokenMeta => endpoint.value().to_owned() + url_endpoint,
@@ -181,7 +184,7 @@ impl SolscanAPI {
         if limit.is_some() {
             url_endpoint += &*format!("&limit={}", limit.unwrap())
         }
-        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountSPLTransfer, url_endpoint.as_str()).await
+        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountSPLTransfers, url_endpoint.as_str()).await
     }
     pub async fn get_account_account(&self, account: &str) -> Result<AccountInfo, SolscanError> {
         let url_endpoint: String = format!("/{}", account);

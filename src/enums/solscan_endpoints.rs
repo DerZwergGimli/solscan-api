@@ -1,32 +1,62 @@
+//! # Solscan-API-Endpoints
+//! This module represents the Solscan-API-Endpoints
+
+/// Solscan-API-Endpoint-Enums
 #[derive(Debug)]
 pub enum SolscanEndpoints {
     //Block
+    /// GET: /block/last
     BlockLast,
+    /// GET: /block/transactions
     BlockTransactions,
+    /// GET: /block/{block}
     Block,
+
     //Transaction
+    /// GET: /transaction/last
     TransactionLast,
+    /// GET: /transaction/{signature}
     Transaction,
+
     //Account
+    /// GET: /account/tokens
     AccountTokens,
+    /// GET: /account/transaction
     AccountTransaction,
+    /// GET: /account/stakeAccounts
     AccountStakeAccounts,
-    AccountSPLTransfer,
+    /// GET: /account/splTransfers
+    AccountSPLTransfers,
+    /// GET: /account/solTransfers
     AccountSolTransfers,
+    /// GET: /account/ExportTransactions
     AccountExportTransactions,
+    /// GET: /account/{account}
     Account,
+
     //Token
+    /// GET: /token/holders
     TokenHolders,
+    /// GET: /token/meta
     TokenMeta,
+    /// GET: /token/list
     TokenList,
+
     //Market
+    /// GET: /market/token
     MarketToken,
-    //ChainInformation
+
+    //ChainInfo
+    /// GET: /chaininfo/
     ChainInfo,
+
     //Tools
+    /// GET: /tools/inspect
     ToolsInspect,
+
 }
 
+/// Implementation of Solscan-API-Endpoints Enums as string-text
 impl SolscanEndpoints {
     pub(crate) fn value(&self) -> &str {
         match *self {
@@ -41,7 +71,7 @@ impl SolscanEndpoints {
             //Account
             SolscanEndpoints::AccountTransaction => "/account/transactions",
             SolscanEndpoints::AccountStakeAccounts => "/account/stakeAccounts",
-            SolscanEndpoints::AccountSPLTransfer => "/account/splTransfers",
+            SolscanEndpoints::AccountSPLTransfers => "/account/splTransfers",
             SolscanEndpoints::AccountSolTransfers => "/account/solTransfers",
             SolscanEndpoints::AccountExportTransactions => "/account/exportTransactions",
             SolscanEndpoints::Account => "/account",
