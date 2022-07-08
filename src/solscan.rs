@@ -10,6 +10,7 @@ use crate::r#const::SOLSCANBASEURL;
 use crate::structs::account_info::AccountInfo;
 use crate::structs::block::Block;
 use crate::structs::chain_info::ChainInfo;
+use crate::structs::sol_transfer::SolTransferList;
 use crate::structs::spl_transfer::SplTransfer;
 use crate::structs::token::Token;
 use crate::structs::token_holder::TokenHolders;
@@ -80,6 +81,7 @@ impl SolscanAPI {
                     SolscanEndpoints::AccountTransaction => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::AccountStakeAccounts => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::AccountSPLTransfers => endpoint.value().to_owned() + url_endpoint,
+                    SolscanEndpoints::AccountSolTransfers => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::Account => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::TokenHolders => endpoint.value().to_owned() + url_endpoint,
                     SolscanEndpoints::TokenMeta => endpoint.value().to_owned() + url_endpoint,
@@ -186,6 +188,22 @@ impl SolscanAPI {
             url_endpoint += &*format!("&limit={}", limit.unwrap())
         }
         self.solscan_fetch::<SplTransfer>(SolscanEndpoints::AccountSPLTransfers, url_endpoint.as_str()).await
+    }
+    pub async fn get_account_sol_transfer(&self, account: &str, form_time: Option<u64>, to_time: Option<u64>, offset: Option<i64>, limit: Option<i64>) -> Result<SolTransferList, SolscanError> {
+        let mut url_endpoint: String = format!("?account={}", account);
+        if form_time.is_some() {
+            url_endpoint += &*format!("&form_time={}", form_time.unwrap())
+        }
+        if to_time.is_some() {
+            url_endpoint += &*format!("&to_time={}", to_time.unwrap())
+        }
+        if offset.is_some() {
+            url_endpoint += &*format!("&offset={}", offset.unwrap())
+        }
+        if limit.is_some() {
+            url_endpoint += &*format!("&limit={}", limit.unwrap())
+        }
+        self.solscan_fetch::<SolTransferList>(SolscanEndpoints::AccountSolTransfers, url_endpoint.as_str()).await
     }
     pub async fn get_account_account(&self, account: &str) -> Result<AccountInfo, SolscanError> {
         let url_endpoint: String = format!("/{}", account);
