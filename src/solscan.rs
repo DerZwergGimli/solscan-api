@@ -16,7 +16,8 @@ use crate::structs::token::Token;
 use crate::structs::token_holder::TokenHolders;
 use crate::structs::token_market_item::TokenMarketItem;
 use crate::structs::token_meta::TokenMeta;
-use crate::structs::transaction::Transaction;
+use crate::structs::transaction_last::Transaction;
+use crate::structs::transcation_list_item::TransactionListItem;
 
 pub struct SolscanAPI {
     base_url: String,
@@ -159,7 +160,7 @@ impl SolscanAPI {
         let url_endpoint: String = format!("?account={}", account);
         self.solscan_fetch::<Vec<Token>>(SolscanEndpoints::AccountTokens, url_endpoint.as_str()).await
     }
-    pub async fn get_account_transactions(&self, account: &str, before_hash: Option<String>, limit: Option<i64>) -> Result<Vec<Transaction>, SolscanError> {
+    pub async fn get_account_transactions(&self, account: &str, before_hash: Option<String>, limit: Option<i64>) -> Result<Vec<TransactionListItem>, SolscanError> {
         let mut url_endpoint: String = format!("?account={}", account);
         if before_hash.is_some() {
             url_endpoint += &*format!("&beforeHash={}", before_hash.unwrap())
@@ -167,7 +168,7 @@ impl SolscanAPI {
         if limit.is_some() {
             url_endpoint += &*format!("&limit={}", limit.unwrap())
         }
-        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::AccountTransaction, url_endpoint.as_str()).await
+        self.solscan_fetch::<Vec<TransactionListItem>>(SolscanEndpoints::AccountTransaction, url_endpoint.as_str()).await
     }
     pub async fn get_account_stake_accounts(&self, account: &str) -> Result<Vec<Token>, SolscanError> {
         let url_endpoint: String = format!("?account={}", account);

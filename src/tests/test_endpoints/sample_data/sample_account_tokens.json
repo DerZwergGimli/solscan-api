@@ -1,5 +1,3 @@
-#[allow(dead_code)]
-pub const SAMPLE_ACCOUNT_TOKENS: &str = r#"
 [
   {
     "tokenAddress": "Fh6Vvw44wb6n5honzAfvrae6iq7FSRiKzMB6runL8csb",
@@ -88,4 +86,3 @@ pub const SAMPLE_ACCOUNT_TOKENS: &str = r#"
     "lamports": 2039280
   }
 ]
-        "#;

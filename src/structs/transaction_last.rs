@@ -1,19 +1,4 @@
-// Example code that deserializes and serializes the model.
-// extern crate serde;
-// #[macro_use]
-// extern crate serde_derive;
-// extern crate serde_json;
-//
-// use generated_module::[object Object];
-//
-// fn main() {
-//     let json = r#"{"answer": 42}"#;
-//     let model: [object Object] = serde_json::from_str(&json).unwrap();
-// }
-
-extern crate serde_derive;
-
-pub type Transactions = Vec<Transaction>;
+use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Transaction {
@@ -41,6 +26,7 @@ pub struct Meta {
     pub pre_token_balances: Vec<Option<serde_json::Value>>,
     pub rewards: Vec<Option<serde_json::Value>>,
     pub status: Status,
+    
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -99,9 +85,9 @@ pub struct Parsed {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Info {
     #[serde(rename = "clockSysvar")]
-    pub clock_sysvar: ClockSysvar,
+    pub clock_sysvar: String,
     #[serde(rename = "slotHashesSysvar")]
-    pub slot_hashes_sysvar: SlotHashesSysvar,
+    pub slot_hashes_sysvar: String,
     pub vote: Vote,
     #[serde(rename = "voteAccount")]
     pub vote_account: String,
@@ -116,21 +102,12 @@ pub struct Vote {
     pub timestamp: Option<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub enum ClockSysvar {
-    #[serde(rename = "SysvarC1ock11111111111111111111111111111111")]
-    SysvarC1Ock11111111111111111111111111111111,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub enum SlotHashesSysvar {
-    #[serde(rename = "SysvarS1otHashes111111111111111111111111111")]
-    SysvarS1OtHashes111111111111111111111111111,
-}
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Program {
     #[serde(rename = "vote")]
     Vote,
 }
+
+
+
