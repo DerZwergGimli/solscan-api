@@ -1,136 +1,126 @@
-// Example code that deserializes and serializes the model.
-// extern crate serde;
-// #[macro_use]
-// extern crate serde_derive;
-// extern crate serde_json;
-//
-// use generated_module::[object Object];
-//
-// fn main() {
-//     let json = r#"{"answer": 42}"#;
-//     let model: [object Object] = serde_json::from_str(&json).unwrap();
-// }
-
 extern crate serde_derive;
 
-pub type Transactions = Vec<Transaction>;
+use serde_derive::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Transaction {
-    pub meta: Meta,
-    pub transaction: TransactionClass,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Meta {
-    pub err: Option<serde_json::Value>,
-    pub fee: i64,
-    #[serde(rename = "innerInstructions")]
-    pub inner_instructions: Vec<Option<serde_json::Value>>,
-    #[serde(rename = "loadedAddresses")]
-    pub loaded_addresses: LoadedAddresses,
-    #[serde(rename = "logMessages")]
-    pub log_messages: Vec<String>,
-    #[serde(rename = "postBalances")]
-    pub post_balances: Vec<i64>,
-    #[serde(rename = "postTokenBalances")]
-    pub post_token_balances: Vec<Option<serde_json::Value>>,
-    #[serde(rename = "preBalances")]
-    pub pre_balances: Vec<i64>,
-    #[serde(rename = "preTokenBalances")]
-    pub pre_token_balances: Vec<Option<serde_json::Value>>,
-    pub rewards: Vec<Option<serde_json::Value>>,
-    pub status: Status,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct LoadedAddresses {
-    pub readonly: Vec<Option<serde_json::Value>>,
-    pub writable: Vec<Option<serde_json::Value>>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Status {
-    #[serde(rename = "Ok")]
-    pub ok: Option<serde_json::Value>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct TransactionClass {
-    pub message: Message,
-    pub signatures: Vec<String>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Message {
-    #[serde(rename = "accountKeys")]
-    pub account_keys: Vec<AccountKey>,
-    #[serde(rename = "addressTableLookups")]
-    pub address_table_lookups: Option<serde_json::Value>,
-    pub instructions: Vec<Instruction>,
+    #[serde(rename = "blockTime")]
+    pub block_time: Option<i64>,
+    pub slot: Option<i64>,
+    #[serde(rename = "txHash")]
+    pub tx_hash: Option<String>,
+    pub fee: Option<i64>,
+    pub status: Option<String>,
+    pub lamport: Option<i64>,
+    pub signer: Option<Vec<String>>,
+    #[serde(rename = "logMessage")]
+    pub log_message: Option<Vec<String>>,
+    #[serde(rename = "inputAccount")]
+    pub input_account: Option<Vec<InputAccount>>,
     #[serde(rename = "recentBlockhash")]
-    pub recent_blockhash: String,
+    pub recent_blockhash: Option<String>,
+    #[serde(rename = "innerInstructions")]
+    pub inner_instructions: Option<Vec<InnerInstruction>>,
+    #[serde(rename = "tokenBalanes")]
+    pub token_balanes: Option<Vec<Option<serde_json::Value>>>,
+    #[serde(rename = "parsedInstruction")]
+    pub parsed_instruction: Option<Vec<TransactionParsedInstruction>>,
+    pub confirmations: Option<i64>,
+    #[serde(rename = "tokenTransfers")]
+    pub token_transfers: Option<Vec<Option<serde_json::Value>>>,
+    #[serde(rename = "solTransfers")]
+    pub sol_transfers: Option<Vec<Option<serde_json::Value>>>,
+    #[serde(rename = "serumTransactions")]
+    pub serum_transactions: Option<Vec<Option<serde_json::Value>>>,
+    #[serde(rename = "raydiumTransactions")]
+    pub raydium_transactions: Option<Vec<Option<serde_json::Value>>>,
+    #[serde(rename = "unknownTransfers")]
+    pub unknown_transfers: Option<Vec<UnknownTransfer>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct AccountKey {
-    pub pubkey: String,
-    pub signer: bool,
-    pub writable: bool,
+pub struct InnerInstruction {
+    pub index: Option<i64>,
+    #[serde(rename = "parsedInstructions")]
+    pub parsed_instructions: Option<Vec<InnerInstructionParsedInstruction>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Instruction {
-    pub accounts: Option<Vec<String>>,
-    pub data: Option<String>,
+pub struct InnerInstructionParsedInstruction {
     #[serde(rename = "programId")]
-    pub program_id: String,
-    pub parsed: Option<Parsed>,
-    pub program: Option<Program>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct Parsed {
-    pub info: Info,
+    pub program_id: Option<String>,
+    pub program: Option<String>,
     #[serde(rename = "type")]
-    pub parsed_type: Program,
+    pub parsed_instruction_type: Option<String>,
+    pub name: Option<String>,
+    pub params: Option<PurpleParams>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Info {
-    #[serde(rename = "clockSysvar")]
-    pub clock_sysvar: ClockSysvar,
-    #[serde(rename = "slotHashesSysvar")]
-    pub slot_hashes_sysvar: SlotHashesSysvar,
-    pub vote: Vote,
-    #[serde(rename = "voteAccount")]
-    pub vote_account: String,
-    #[serde(rename = "voteAuthority")]
-    pub vote_authority: String,
+pub struct PurpleParams {
+    pub source: Option<String>,
+    pub destination: Option<String>,
+    pub amount: Option<i64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Vote {
-    pub hash: String,
-    pub slots: Vec<i64>,
-    pub timestamp: Option<i64>,
+pub struct InputAccount {
+    pub account: Option<String>,
+    pub signer: Option<bool>,
+    pub writable: Option<bool>,
+    #[serde(rename = "preBalance")]
+    pub pre_balance: Option<i64>,
+    #[serde(rename = "postBalance")]
+    pub post_balance: Option<i64>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub enum ClockSysvar {
-    #[serde(rename = "SysvarC1ock11111111111111111111111111111111")]
-    SysvarC1Ock11111111111111111111111111111111,
+pub struct TransactionParsedInstruction {
+    #[serde(rename = "programId")]
+    pub program_id: Option<String>,
+    #[serde(rename = "type")]
+    pub parsed_instruction_type: Option<String>,
+    pub data: Option<String>,
+    #[serde(rename = "dataEncode")]
+    pub data_encode: Option<String>,
+    pub name: Option<String>,
+    pub params: Option<FluffyParams>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub enum SlotHashesSysvar {
-    #[serde(rename = "SysvarS1otHashes111111111111111111111111111")]
-    SysvarS1OtHashes111111111111111111111111111,
+pub struct FluffyParams {
+    #[serde(rename = "Account0")]
+    pub account0: Option<String>,
+    #[serde(rename = "Account1")]
+    pub account1: Option<String>,
+    #[serde(rename = "Account2")]
+    pub account2: Option<String>,
+    #[serde(rename = "Account3")]
+    pub account3: Option<String>,
+    #[serde(rename = "Account4")]
+    pub account4: Option<String>,
+    #[serde(rename = "Account5")]
+    pub account5: Option<String>,
+    #[serde(rename = "Account6")]
+    pub account6: Option<String>,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UnknownTransfer {
+    #[serde(rename = "programId")]
+    pub program_id: Option<String>,
+    pub event: Option<Vec<Event>>,
+}
 
 #[derive(Debug, Serialize, Deserialize)]
-pub enum Program {
-    #[serde(rename = "vote")]
-    Vote,
+pub struct Event {
+    pub source: Option<String>,
+    pub destination: Option<String>,
+    pub amount: Option<i64>,
+    #[serde(rename = "type")]
+    pub event_type: Option<String>,
+    pub decimals: Option<i64>,
+    pub symbol: Option<String>,
+    #[serde(rename = "tokenAddress")]
+    pub token_address: Option<String>,
 }

@@ -16,7 +16,7 @@ use crate::structs::token::Token;
 use crate::structs::token_holder::TokenHolders;
 use crate::structs::token_market_item::TokenMarketItem;
 use crate::structs::token_meta::TokenMeta;
-use crate::structs::transaction_last::Transaction;
+use crate::structs::transaction::Transaction;
 use crate::structs::transcation_list_item::TransactionListItem;
 
 pub struct SolscanAPI {
@@ -41,7 +41,7 @@ impl SolscanAPI {
 
     //region private functions
     async fn fetch(&self, url_path: String) -> Result<String, SolscanError> {
-        println!("{:?}", url_path);
+        println!("{:?}", self.base_url.to_string() + url_path.as_str());
         match {
             self.client.get(self.base_url.to_string() + url_path.as_str())
                 .header("User-Agent", "Mozilla/5.0")

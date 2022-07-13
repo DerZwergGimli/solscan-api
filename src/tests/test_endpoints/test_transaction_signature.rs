@@ -13,7 +13,7 @@ mod test_transaction_signature {
         let server = MockServer::start();
         let mock_block = server.mock(|when, then| {
             when.method(GET)
-                .path("/transaction/T4ipYTjKUqHQpfuA8ZM5E4iJag9kX9nGhjbY974oq2ucyYRL6eWhqTjtmk3cqfqTSu8Qdce33vzKQd7bWEX3H21");
+                .path("/transaction/2DeFa7rvwudbY7f4XkUrJ9RfUBTjT6CmFHkgqnNpE4cvaWRpRJEkx4myTpmLpQsaKvDmtMKQf6KNsdrgGNxPCnVY");
             then.status(200)
                 .header("content-type", "text/html")
                 .body(SAMPLE_TRANSACTION_SIGNATURE)
@@ -21,6 +21,6 @@ mod test_transaction_signature {
         });
 
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
-        let result = solscan_api.get_transaction("T4ipYTjKUqHQpfuA8ZM5E4iJag9kX9nGhjbY974oq2ucyYRL6eWhqTjtmk3cqfqTSu8Qdce33vzKQd7bWEX3H21").await.unwrap();
+        let result = solscan_api.get_transaction("2DeFa7rvwudbY7f4XkUrJ9RfUBTjT6CmFHkgqnNpE4cvaWRpRJEkx4myTpmLpQsaKvDmtMKQf6KNsdrgGNxPCnVY").await.unwrap();
     }
 }
