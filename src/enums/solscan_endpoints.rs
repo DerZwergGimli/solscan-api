@@ -1,8 +1,9 @@
 //! # Solscan-API-Endpoints
 //! This module represents the Solscan-API-Endpoints
 
-/// Solscan-API-Endpoint-Enums
+
 #[derive(Debug)]
+/// Creating an enum with the name SolscanEndpoints.
 pub enum SolscanEndpoints {
     //Block
     /// GET: /block/last
