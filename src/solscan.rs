@@ -1,5 +1,5 @@
 //! # The Solcan Wrapper
-//! This lib represent a wrapper for the SolcanAPI
+//! This represent a wrapper for the SolcanAPI
 
 use reqwest::{Client, Error, StatusCode};
 use serde::de::DeserializeOwned;
@@ -21,19 +21,44 @@ use crate::structs::transaction::Transaction;
 use crate::structs::transaction_last::TransactionLast;
 use crate::structs::transaction_list_item::TransactionListItem;
 
+/// `SolscanAPI` is a struct that contains a `String` for the SolscanURL and a `Client` which is the instance.
+///
+/// Properties:
+///
+/// A doc comment.
+/// A doc comment.
+/// A doc comment.
+/// * `base_url`: The base URL for the Solscan API.
+/// * `client`: This is the HTTP client that will be used to make requests to the Solscan API.
 pub struct SolscanAPI {
     base_url: String,
     client: Client,
 }
 
 
+/// Implementation of the struct called SolscanAPI.
 impl SolscanAPI {
+    /// It creates a new instance of the SolscanAPI struct.
+    ///
+    /// Returns:
+    ///
+    /// A new instance of the SolscanAPI struct.
     pub fn new() -> SolscanAPI {
         SolscanAPI {
             base_url: SOLSCANBASEURL.parse().unwrap(),
             client: Client::new(),
         }
     }
+    /// > This function creates a new instance of the SolscanAPI struct, which is used to make
+    /// custom requests to the Solscan API (mostly useful for mockups)
+    ///
+    /// Arguments:
+    ///
+    /// * `solscan_url`: The URL of the Solscan API.
+    ///
+    /// Returns:
+    ///
+    /// A new instance of the SolscanAPI struct.
     pub fn new_with_url(solscan_url: String) -> SolscanAPI {
         SolscanAPI {
             base_url: solscan_url,
@@ -42,6 +67,17 @@ impl SolscanAPI {
     }
 
     //region private functions
+    /// It takes a string, appends it to the base url, makes a get request, checks the status code, and
+    /// returns the text of the response.
+    /// Represents the actual GET request.
+    ///
+    /// Arguments:
+    ///
+    /// * `url_path`: The path to the API endpoint you want to call.
+    ///
+    /// Returns:
+    ///
+    /// A Result<String, SolscanError>
     async fn fetch(&self, url_path: String) -> Result<String, SolscanError> {
         println!("{:?}", self.base_url.to_string() + url_path.as_str());
         match {
@@ -71,7 +107,17 @@ impl SolscanAPI {
         }
     }
 
-    pub async fn solscan_fetch<T: DeserializeOwned>(&self, endpoint: SolscanEndpoints, url_endpoint: &str) -> Result<T, SolscanError> {
+    /// It chooses which endpoint to use to fetch data from the Solscan API.
+    ///
+    /// Arguments:
+    ///
+    /// * `endpoint`: SolscanEndpoints - This is the endpoint you want to use.
+    /// * `url_endpoint`: The endpoint to be appended to the base url.
+    ///
+    /// Returns:
+    ///
+    /// A Result<T, SolscanError>
+    async fn solscan_fetch<T: DeserializeOwned>(&self, endpoint: SolscanEndpoints, url_endpoint: &str) -> Result<T, SolscanError> {
         match {
             self.fetch(
                 match endpoint {
@@ -114,6 +160,15 @@ impl SolscanAPI {
     //endregion
 
     //region public functions
+    /// It checks the status of the endpoint.
+    ///
+    /// Arguments:
+    ///
+    /// * `endpoint`: The endpoint to ping. If none is provided, the base url will be used.
+    ///
+    /// Returns:
+    ///
+    /// A Result<StatusCode, Error>
     pub async fn ping_status(&self, endpoint: Option<String>) -> Result<StatusCode, Error> {
         Ok(self.client.get(self.base_url.to_string() + endpoint.unwrap_or_default().as_str()).header("User-Agent", "Mozilla/5.0").send().await?.status())
     }
