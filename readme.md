@@ -46,9 +46,9 @@ BaseURL: `https://public-api.solscan.io/`
 ### Transaction
 
 | State* | Type  | Endpoint                       |
-|-------|-------|--------------------------------|
-| ✅     | GET   | ``/transaction/last``          |
-| ✅     | GET   | ``/transaction/{signature}``   |
+|--------|-------|--------------------------------|
+| ✅      | GET   | ``/transaction/last``          |
+| ✅      | GET   | ``/transaction/{signature}``   |
 
 ### Account
 
@@ -84,8 +84,8 @@ BaseURL: `https://public-api.solscan.io/`
 
 ### Tools
 
-| State* | Type  | Endpoint          |
-|--------|-------|-------------------|
+| State* | Type  | Endpoint      |
+|--------|-------|---------------|
 | ⛔      | GET   | ``/Tools/``   |
 
 #### *State of implementation (yes/no)
