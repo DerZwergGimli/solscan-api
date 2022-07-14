@@ -8,7 +8,8 @@ use crate::enums::solscan_endpoints::SolscanEndpoints;
 use crate::enums::solscan_errors::SolscanError;
 use crate::r#const::SOLSCANBASEURL;
 use crate::structs::account_info::AccountInfo;
-use crate::structs::block::Block;
+use crate::structs::block_result::{Block, BlockResult};
+use crate::structs::block_transaction::BlockTransaction;
 use crate::structs::chain_info::ChainInfo;
 use crate::structs::sol_transfer::SolTransferList;
 use crate::structs::spl_transfer::SplTransfer;
@@ -18,7 +19,7 @@ use crate::structs::token_market_item::TokenMarketItem;
 use crate::structs::token_meta::TokenMeta;
 use crate::structs::transaction::Transaction;
 use crate::structs::transaction_last::TransactionLast;
-use crate::structs::transcation_list_item::TransactionListItem;
+use crate::structs::transaction_list_item::TransactionListItem;
 
 pub struct SolscanAPI {
     base_url: String,
@@ -119,14 +120,14 @@ impl SolscanAPI {
 
 
     //region Block
-    pub async fn get_block_last(&self, limit: Option<i64>) -> Result<Vec<Block>, SolscanError> {
+    pub async fn get_block_last(&self, limit: Option<i64>) -> Result<Vec<BlockResult>, SolscanError> {
         let mut url_endpoint: String = "".to_string();
         if limit.is_some() {
             url_endpoint += &*format!("?limit={}", limit.unwrap());
         }
-        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockLast, url_endpoint.as_str()).await
+        self.solscan_fetch::<Vec<BlockResult>>(SolscanEndpoints::BlockLast, url_endpoint.as_str()).await
     }
-    pub async fn get_block_transactions(&self, block: i64, offset: Option<i64>, limit: Option<i64>) -> Result<Vec<Block>, SolscanError> {
+    pub async fn get_block_transactions(&self, block: i64, offset: Option<i64>, limit: Option<i64>) -> Result<Vec<TransactionLast>, SolscanError> {
         let mut url_endpoint: String = format!("?block={}", block);
         if offset.is_some() {
             url_endpoint += &*format!("&offset={}", offset.unwrap());
@@ -134,11 +135,11 @@ impl SolscanAPI {
         if limit.is_some() {
             url_endpoint += &*format!("&limit={}", limit.unwrap());
         }
-        self.solscan_fetch::<Vec<Block>>(SolscanEndpoints::BlockTransactions, url_endpoint.as_str()).await
+        self.solscan_fetch::<Vec<TransactionLast>>(SolscanEndpoints::BlockTransactions, url_endpoint.as_str()).await
     }
-    pub async fn get_block_block(&self, block: i64) -> Result<Block, SolscanError> {
+    pub async fn get_block_block(&self, block: i64) -> Result<BlockResult, SolscanError> {
         let url_endpoint: String = format!("/{}", block);
-        self.solscan_fetch::<Block>(SolscanEndpoints::Block, url_endpoint.as_str()).await
+        self.solscan_fetch::<BlockResult>(SolscanEndpoints::Block, url_endpoint.as_str()).await
     }
     //endregion
 

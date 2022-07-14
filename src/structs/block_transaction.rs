@@ -1,55 +1,32 @@
-extern crate serde;
-extern crate serde_json;
-
-use serde::{Deserialize, Deserializer, Serialize};
-
-fn deserialize_optional_field<'de, T, D>(deserializer: D)
-                                         -> Result<Option<Option<T>>, D::Error>
-    where D: Deserializer<'de>,
-          T: Deserialize<'de>
-{
-    Ok(Some(Option::deserialize(deserializer)?))
-}
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct TransactionLast {
-    #[serde(skip_serializing_if = "Option::is_none")]
+pub struct BlockTransaction {
     pub meta: Option<Meta>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub transaction: Option<Transaction>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Meta {
     pub err: Option<Err>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub fee: Option<i64>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "innerInstructions")]
-    pub inner_instructions: Option<Vec<Option<serde_json::Value>>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inner_instructions: Option<Vec<InnerInstruction>>,
     #[serde(rename = "loadedAddresses")]
     pub loaded_addresses: Option<LoadedAddresses>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "logMessages")]
     pub log_messages: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "postBalances")]
     pub post_balances: Option<Vec<i64>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "postTokenBalances")]
     pub post_token_balances: Option<Vec<TokenBalance>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "preBalances")]
     pub pre_balances: Option<Vec<i64>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "preTokenBalances")]
     pub pre_token_balances: Option<Vec<TokenBalance>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub rewards: Option<Vec<Option<serde_json::Value>>>,
     pub status: Option<Status>,
 }
-
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Err {
@@ -59,9 +36,37 @@ pub struct Err {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InstructionErrorClass {
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "Custom")]
     pub custom: Option<i64>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct InnerInstruction {
+    pub index: Option<i64>,
+    pub instructions: Option<Vec<InnerInstructionInstruction>>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct InnerInstructionInstruction {
+    pub parsed: Option<PurpleParsed>,
+    pub program: Option<Program>,
+    #[serde(rename = "programId")]
+    pub program_id: Option<ProgramId>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PurpleParsed {
+    pub info: Option<PurpleInfo>,
+    #[serde(rename = "type")]
+    pub parsed_type: Option<Type>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct PurpleInfo {
+    pub amount: Option<String>,
+    pub authority: Option<String>,
+    pub destination: Option<String>,
+    pub source: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -76,11 +81,10 @@ pub struct TokenBalance {
     pub account_index: Option<i64>,
     pub mint: Option<String>,
     pub owner: Option<String>,
+    #[serde(rename = "programId")]
+    pub program_id: Option<ProgramId>,
     #[serde(rename = "uiTokenAmount")]
     pub ui_token_amount: Option<UiTokenAmount>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "programId")]
-    pub program_id: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -91,26 +95,19 @@ pub struct UiTokenAmount {
     pub ui_amount: Option<f64>,
     #[serde(rename = "uiAmountString")]
     pub ui_amount_string: Option<String>,
-
 }
 
-#[derive(Debug, Serialize, Deserialize, Default)]
-#[serde(default)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Status {
-    #[serde(deserialize_with = "deserialize_optional_field")]
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "Ok")]
-    pub ok: Option<Option<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ok: Option<serde_json::Value>,
     #[serde(rename = "Err")]
     pub err: Option<Err>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Transaction {
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<Message>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub signatures: Option<Vec<String>>,
 }
 
@@ -120,7 +117,7 @@ pub struct Message {
     pub account_keys: Option<Vec<AccountKey>>,
     #[serde(rename = "addressTableLookups")]
     pub address_table_lookups: Option<serde_json::Value>,
-    pub instructions: Option<Vec<Instruction>>,
+    pub instructions: Option<Vec<MessageInstruction>>,
     #[serde(rename = "recentBlockhash")]
     pub recent_blockhash: Option<String>,
 }
@@ -133,56 +130,42 @@ pub struct AccountKey {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Instruction {
+pub struct MessageInstruction {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parsed: Option<FluffyParsed>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program: Option<Program>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "programId")]
+    pub program_id: Option<ProgramId>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accounts: Option<Vec<String>>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<String>,
-    #[serde(rename = "programId")]
-    pub program_id: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub parsed: Option<Parsed>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub program: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Parsed {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub info: Option<Info>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+pub struct FluffyParsed {
+    pub info: Option<FluffyInfo>,
     #[serde(rename = "type")]
-    pub parsed_type: Option<String>,
+    pub parsed_type: Option<Type>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct Info {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub destination: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub lamports: Option<i64>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub source: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+pub struct FluffyInfo {
     #[serde(rename = "clockSysvar")]
-    pub clock_sysvar: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    pub clock_sysvar: Option<ClockSysvar>,
     #[serde(rename = "slotHashesSysvar")]
-    pub slot_hashes_sysvar: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slot_hashes_sysvar: Option<SlotHashesSysvar>,
     pub vote: Option<Vote>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "voteAccount")]
     pub vote_account: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "voteAuthority")]
     pub vote_authority: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub hash: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub amount: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
     pub authority: Option<String>,
+    pub destination: Option<String>,
+    pub source: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -197,5 +180,46 @@ pub struct Vote {
 pub enum InstructionErrorElement {
     InstructionErrorClass(InstructionErrorClass),
     Integer(i64),
-    String(String),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Type {
+    #[serde(rename = "transfer")]
+    Transfer,
+    #[serde(rename = "vote")]
+    Vote,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum Program {
+    #[serde(rename = "spl-token")]
+    SplToken,
+    #[serde(rename = "vote")]
+    Vote,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum ProgramId {
+    ComputeBudget111111111111111111111111111111,
+    #[serde(rename = "FsJ3A3u2vn5cTVofAjvy6y5kwABJAqYWpe4975bi2epH")]
+    FsJ3A3U2Vn5CTVofAjvy6Y5KwAbjAqYWpe4975Bi2EpH,
+    #[serde(rename = "sarbL3oPVviJSsRzZYzPCMA7p7pFGzRBFQFU62xNpNz")]
+    SarbL3OPVviJSsRzZYzPcma7P7PFGzRbfqfu62XNpNz,
+    #[serde(rename = "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin")]
+    The9XQeWvG816BUx9EPjHmaT23YvVm2ZWbrrpZb9PusVFin,
+    #[serde(rename = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA")]
+    TokenkegQfeZyiNwAJbNbGkpfxcWuBvf9Ss623Vq5Da,
+    Vote111111111111111111111111111111111111111,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum ClockSysvar {
+    #[serde(rename = "SysvarC1ock11111111111111111111111111111111")]
+    SysvarC1Ock11111111111111111111111111111111,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub enum SlotHashesSysvar {
+    #[serde(rename = "SysvarS1otHashes111111111111111111111111111")]
+    SysvarS1OtHashes111111111111111111111111111,
 }

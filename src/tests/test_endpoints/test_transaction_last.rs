@@ -32,9 +32,6 @@ mod test_transaction_last {
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
         let result = solscan_api.get_transaction_last(Some(10)).await.unwrap();
 
-        println!("{:?}", &result);
-
-
         assert_json_matches!(json!(&result), json_data, config)
     }
 }
