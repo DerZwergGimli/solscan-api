@@ -1,6 +1,4 @@
-extern crate serde_derive;
-
-use serde_derive::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Transaction {
@@ -19,6 +17,7 @@ pub struct Transaction {
     pub input_account: Option<Vec<InputAccount>>,
     #[serde(rename = "recentBlockhash")]
     pub recent_blockhash: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "innerInstructions")]
     pub inner_instructions: Option<Vec<InnerInstruction>>,
     #[serde(rename = "tokenBalanes")]
@@ -42,26 +41,9 @@ pub struct Transaction {
 pub struct InnerInstruction {
     pub index: Option<i64>,
     #[serde(rename = "parsedInstructions")]
-    pub parsed_instructions: Option<Vec<InnerInstructionParsedInstruction>>,
+    pub parsed_instructions: Option<Vec<TransactionParsedInstruction>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
-pub struct InnerInstructionParsedInstruction {
-    #[serde(rename = "programId")]
-    pub program_id: Option<String>,
-    pub program: Option<String>,
-    #[serde(rename = "type")]
-    pub parsed_instruction_type: Option<String>,
-    pub name: Option<String>,
-    pub params: Option<PurpleParams>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct PurpleParams {
-    pub source: Option<String>,
-    pub destination: Option<String>,
-    pub amount: Option<i64>,
-}
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct InputAccount {
@@ -76,34 +58,81 @@ pub struct InputAccount {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct TransactionParsedInstruction {
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "programId")]
     pub program_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub program: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "type")]
     pub parsed_instruction_type: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename = "dataEncode")]
     pub data_encode: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    pub params: Option<FluffyParams>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub params: Option<Params>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub extra: Option<Extra>,
+
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct FluffyParams {
-    #[serde(rename = "Account0")]
-    pub account0: Option<String>,
-    #[serde(rename = "Account1")]
-    pub account1: Option<String>,
-    #[serde(rename = "Account2")]
-    pub account2: Option<String>,
-    #[serde(rename = "Account3")]
-    pub account3: Option<String>,
-    #[serde(rename = "Account4")]
-    pub account4: Option<String>,
-    #[serde(rename = "Account5")]
-    pub account5: Option<String>,
-    #[serde(rename = "Account6")]
-    pub account6: Option<String>,
+pub struct Params {
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authority: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "associatedAccount")]
+    pub associated_account: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "tokenAddress")]
+    pub token_address: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "tokenProgramId")]
+    pub token_program_id: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amount: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mint: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "newAccount")]
+    pub new_account: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "transferAmount(SOL)")]
+    pub transfer_amount_sol: Option<f64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    #[serde(rename = "programOwner")]
+    pub program_owner: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+
 }
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Extra {
+    pub source: Option<String>,
+    pub destination: Option<String>,
+    pub authority: Option<String>,
+    pub amount: Option<String>,
+    pub mint: Option<String>,
+    #[serde(rename = "tokenAddress")]
+    pub token_address: Option<String>,
+    pub decimals: Option<i64>,
+    #[serde(rename = "sourceOwner")]
+    pub source_owner: Option<String>,
+    #[serde(rename = "destinationOwner")]
+    pub destination_owner: Option<String>,
+}
+
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UnknownTransfer {

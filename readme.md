@@ -6,6 +6,10 @@
 
 ``unoffical``
 
+# Solscan API
+
+[Solscan-Public-API](https://public-api.solscan.io/docs/#/)
+
 # Implemented Endpoints
 
 ### Block

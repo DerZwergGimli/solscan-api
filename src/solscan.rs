@@ -17,6 +17,7 @@ use crate::structs::token_holder::TokenHolders;
 use crate::structs::token_market_item::TokenMarketItem;
 use crate::structs::token_meta::TokenMeta;
 use crate::structs::transaction::Transaction;
+use crate::structs::transaction_last::TransactionLast;
 use crate::structs::transcation_list_item::TransactionListItem;
 
 pub struct SolscanAPI {
@@ -142,12 +143,12 @@ impl SolscanAPI {
     //endregion
 
     //region Transaction
-    pub async fn get_transaction_last(&self, limit: Option<i64>) -> Result<Vec<Transaction>, SolscanError> {
+    pub async fn get_transaction_last(&self, limit: Option<i64>) -> Result<Vec<TransactionLast>, SolscanError> {
         let mut url_endpoint: String = "".to_string();
         if limit.is_some() {
             url_endpoint += &*format!("?limit={}", limit.unwrap())
         }
-        self.solscan_fetch::<Vec<Transaction>>(SolscanEndpoints::TransactionLast, url_endpoint.as_str()).await
+        self.solscan_fetch::<Vec<TransactionLast>>(SolscanEndpoints::TransactionLast, url_endpoint.as_str()).await
     }
     pub async fn get_transaction(&self, signature: &str) -> Result<Transaction, SolscanError> {
         let url_endpoint: String = format!("/{}", signature);
