@@ -19,9 +19,9 @@
 If you find any issues please create an [Issue](https://github.com/DerZwergGimli/solscan-api/issues) and provide the
 following data:
 
-- Endpoint that is not working properly.
-- All Parameters that you have used for making that request.
-- JSON Data of the response.
+- Endpoint: Endpoint that is not working properly.
+- Parameters: All Parameters that you have used for making that request.
+- JSON: JSON Data of the response.
 
 ## Usage
 
