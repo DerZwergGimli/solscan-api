@@ -10,11 +10,14 @@
 //! # Example
 //! Fetching last 10 Blocks form Solana-Blockchain via SolscanAPI
 //! ```
-//!async fn main() {
+//! use solscan_api::enums::solscan_errors;
+//! #[tokio::main]
+//! async fn main() -> Result<(),solscan_errors::SolscanError> {
 //!     let solscan_api = solscan_api::solscan::SolscanAPI::new();
 //!     let result = solscan_api.get_block_last(Some(10)).await.unwrap();
 //!
-//!     println("{:?}", result)
+//!     println!("{:?}", result);
+//!     Ok(())
 //! }
 //! ```
 
