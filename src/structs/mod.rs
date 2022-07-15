@@ -1,3 +1,4 @@
+//! # Solscan-Api Structs
 pub mod block_result;
 pub mod token;
 pub mod transaction_list_item;
