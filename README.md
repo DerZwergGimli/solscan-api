@@ -72,8 +72,8 @@ BaseURL: `https://public-api.solscan.io/`
 | ✅      | GET   | ``/account/stakeAccounts``      |
 | ✅      | GET   | ``/account/splTransfers``       |
 | ✅      | GET   | ``/account/solTransfers``       |
-| ✅      | GET   | ``/account/exportTransactions`` |
-| ⛔      | GET   | ``/account/{account}``          |
+| ⛔      | GET   | ``/account/exportTransactions`` |
+| ✅      | GET   | ``/account/{account}``          |
 
 ### Token
 
