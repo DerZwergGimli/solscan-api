@@ -1,6 +1,6 @@
 [package]
 name = "solscan-api"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "A Wrapper for the Solscan-API for fetching informations about SOL-Accounts and more..."
 license = "MIT"
