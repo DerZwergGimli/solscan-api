@@ -4,6 +4,9 @@ version = "0.1.1"
 edition = "2021"
 description = "A Wrapper for the Solscan-API for fetching informations about SOL-Accounts and more..."
 license = "MIT"
+readme = "README.md"
+documentation = "https://docs.rs/solscan-api"
+repository = "https://github.com/DerZwergGimli/solscan-api"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
