@@ -12,6 +12,15 @@
 
 `Default Limit: 150 requests/ 30 seconds, 100k requests / day`
 
+## Help this Project
+
+If you find any issues please create an [Issue](https://github.com/DerZwergGimli/solscan-api/issues) and provide the
+following data:
+
+- Endpoint that is not working properly.
+- All Parameters that you have used for making that request.
+- JSON Data of the response.
+
 ## Usage
 
 Example: Fetching last 10 Blocks form Solana-Blockchain via SolscanAPI
@@ -95,8 +104,6 @@ BaseURL: `https://public-api.solscan.io/`
 - [QuickType](https://app.quicktype.io/) a generator for Types from JSON
 
 ## Donate
-
-## Donations
 
 If you want to get me a ☕ so I won't 😴
 
