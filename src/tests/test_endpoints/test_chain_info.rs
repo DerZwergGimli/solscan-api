@@ -2,25 +2,33 @@
 
 #[cfg(test)]
 mod test_chain_info {
+    use std::fs;
+
+    use assert_json_diff::{assert_json_matches, CompareMode, Config, NumericMode};
     use httpmock::MockServer;
     use httpmock::prelude::*;
+    use serde_json::{json, Value};
 
     use crate::solscan::SolscanAPI;
-    use crate::tests::test_endpoints::sample_data::sample_chain_info::SAMPLE_CHAIN_INFO;
 
     #[tokio::test]
     async fn test_chain_info_success() {
+        let json_data_file = fs::read_to_string("./src/tests/test_endpoints/sample_data/sample_chain_info.json").expect("Unable to read file");
+        let json_data: Value = serde_json::from_str(&json_data_file).expect("JSON does not have correct format.");
+        let config = Config::new(CompareMode::Strict).numeric_mode(NumericMode::AssumeFloat);
+
         let server = MockServer::start();
         let mock_block = server.mock(|when, then| {
             when.method(GET)
                 .path("/chaininfo/");
             then.status(200)
                 .header("content-type", "text/html")
-                .body(SAMPLE_CHAIN_INFO);
+                .json_body(json_data.clone());
         });
 
         let solscan_api = SolscanAPI::new_with_url(server.url(""));
-        let result = solscan_api.get_chain_info().await;
-        assert_eq!(result.is_ok(), true)
+        let result = solscan_api.get_chain_info().await.unwrap();
+
+        assert_json_matches!(json!(&result), json_data, config)
     }
 }
